@@ -33,7 +33,7 @@ const fs = require('node:fs');
 // située dans le catch
 
 let studentsText;
-let students;
+let students = [];
 
 try {
   studentsText = fs.readFileSync("./Data/students.json", {encoding: 'utf8'})
@@ -114,3 +114,26 @@ console.log(`L'élève avec la meilleur note est ${bestStudent.student.name} ave
 students.sort((a, b) => (a.notes.reduce((acc, curr) => acc + curr, 0) / a.notes.length) - (b.notes.reduce((acc, curr) => acc + curr, 0) / b.notes.length))
 
 console.log(students)
+
+const newStudents = [
+  {name: "Emma Johnson",notes: [16, 18, 17],address: "789 Maple Avenue, Toronto"},
+  {name: "Diego Hernandez",notes: [14, 15, 16],address: "456 Avenida de la Constitución, Mexico City"}
+];
+
+const newArrayStudents = students.concat(newStudents);
+
+async function saveFile(data) {
+  await fs.writeFile('./Data/students.json', JSON.stringify(data), console.error)
+  console.log('File saved !')
+}
+
+saveFile(newArrayStudents)
+
+const studentsUppercased = newArrayStudents.map(student => {
+  return {
+    ...student,
+    name: student.name.toUpperCase()
+  }
+})
+
+saveFile(studentsUppercased)
