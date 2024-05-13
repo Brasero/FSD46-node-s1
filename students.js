@@ -18,7 +18,7 @@ const fs = require('node:fs');
   
   5. Ordonnez maintenant l'ensemble des données dans le tableau.
 * */
-
+// Lecture du fichier de manière asynchrone
 // fs.readFile("./Data/students.json", {encoding: 'utf8'}, (err, data) => {
 //   if (err) {
 //     console.error(err)
@@ -26,6 +26,11 @@ const fs = require('node:fs');
 //   }
 //   console.log(data)
 // })
+
+// Lecture du fichier de manière synchrone
+// On déclare `studentsText` et `students` à l'avance afin que ces variables existent en dehors du bloc try & catch
+// Dans tous les cas si jamais la lecture du fichier echoue le processus n'ira pas plus loin grâce à `process.exit()`
+// située dans le catch
 
 let studentsText;
 let students;
@@ -38,29 +43,42 @@ try {
   process.exit(0)
 }
 
+// Si la lecture du fichier s'est bien passée on déclare un tableau `more17`
+// déstiné à contenir le nom de tous les élèves ayant une moyenne strictement supérieure à 17
+
 const more17 = [];
 
-
+// On boucle sur tous les élèments du tableau students
 for (let student of students) {
+  // On calcule la moyenne de chaque étudiant
   const cumul = student.notes.reduce((acc, curr) => acc + curr, 0)
   const moy = cumul / student.notes.length
+  // Si sa moyenne est supérieure à 17 on pousse son nom dans le tableau `more17`
   if (moy > 17) {
     more17.push(student.name)
   }
 }
 
 console.log(`Les éléves ayant une moyenne supérieure à 17 sont ${more17.join(", ")}`)
+
+// La variable bestStudent sera déstinée à contenir les information du meilleur élève en fonction de sa moyenne
 let bestStudent = null;
 
 for (let student of students) {
+  // on calcule la moyenne de l'élève
   const cumul = student.notes.reduce((acc, curr) => acc + curr, 0)
   const moy = cumul / student.notes.length
+  
+  // Si `bestStudent` contient quelque chose et que la moyenne de l'élève du tour de boucle est supérieure
+  // à celle de l'élève enregistrée dans `bestStudent` alors on remplace ce dérnier par notre élève actuel
   if (bestStudent && moy > bestStudent.moy) {
     bestStudent = {
       student,
       moy
     }
-  } else {
+  }
+  // Sinon, `bestStudent` est donc vide, il suffit d'y enregistrer notre élève actuel
+  else {
     bestStudent = {
       student,
       moy
@@ -70,6 +88,7 @@ for (let student of students) {
 
 console.log(`L'éléve avec la meilleur moyenne est ${bestStudent.student.name} avec une moyenne de ${bestStudent.moy}`)
 
+// Meme logique que l'éxo du dessus, mais cette fois-ci, on cherche l'élève avec la meilleure note parmis toute
 for (let student of students) {
   
   const bestNote = student.notes.reduce((acc, curr) => acc < curr ? curr : acc, 0)
@@ -87,6 +106,10 @@ for (let student of students) {
 }
 
 console.log(`L'élève avec la meilleur note est ${bestStudent.student.name} avec la note de ${bestStudent.bestNote}`)
+
+// Pour le tri du tableau, on utilise la méthode sort(),
+// cette dernière s'attend à recevoir une fonction représentant l'algorithme de tri que l'on souhaite utiliser.
+// Voir doc MDN pour plus d'info sur les méthodes de tableau
 
 students.sort((a, b) => (a.notes.reduce((acc, curr) => acc + curr, 0) / a.notes.length) - (b.notes.reduce((acc, curr) => acc + curr, 0) / b.notes.length))
 
