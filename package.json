@@ -1,0 +1,20 @@
+{
+  "name": "fsd46-s1-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brasero/FSD46-node-s1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Brasero/FSD46-node-s1/issues"
+  },
+  "homepage": "https://github.com/Brasero/FSD46-node-s1#readme"
+}
