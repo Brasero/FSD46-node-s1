@@ -1,7 +1,5 @@
 import dotenv from 'dotenv'
 import readline from "node:readline";
-import {extractArg} from "./utils.js";
-import {list, more, find, less, addNote} from "./studentController.js";
 // dotenv.config() défini les variable d'environnement disponible dans `process.env`
 // Il est possible de lui passer en argument un objet d'options, parmis elles, on retrouve
 // l'option `path` permettant de préciser le chemin du ou des fichiers d'environnement
@@ -9,6 +7,8 @@ import {list, more, find, less, addNote} from "./studentController.js";
 dotenv.config(/*{
   path: './.env.prod'
 }*/)
+import {list, more, find, less, addNote, mention, saveFile} from "./src/controller/studentController.js";
+import {extractArg} from "./src/utils/utils.js";
 
 
 const commands = [
@@ -63,6 +63,7 @@ rl.prompt()
 rl.on('line', (line) => {
   
   if (line.trim() === 'quit') {
+    saveFile()
     rl.close()
   }
   
@@ -91,7 +92,11 @@ rl.on('line', (line) => {
         })
       })
       break;
-    
+    case line.match(/^mention /) ? line : null :
+      mention(extractArg(line))
+      break;
+      
+      
     default:
       console.group('Commande inconnue')
         console.log('Liste des commandes')
@@ -103,6 +108,6 @@ rl.on('line', (line) => {
 })
   // l'évènement `close` est déclenché lors de l'arrêt du processus en cours
   .on('close', () => {
-  console.log('Bye')
-  process.exit();
+    console.log('Bye')
+    process.exit();
 })

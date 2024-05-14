@@ -4,6 +4,11 @@ export const extractArg = (text) => {
   return elem[1] + ' ' + elem[2]
 }
 
+export const calcAverage = (notes) => {
+  const cumul = notes.reduce((acc, curr) => acc + curr, 0)
+  return cumul / notes.length
+}
+
 //exports.extract = extractArg // export nommé
 
 /*
