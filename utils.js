@@ -11,5 +11,3 @@ export const extractArg = (text) => {
 *   extractArg
 * } // export par default
 * */
-
-export default extractArg

@@ -1,5 +1,5 @@
-import {extractArg} from "./utils.mjs"
-import fs from 'node:fs';
+import {extractArg} from "./utils.js"
+import {list, more, find} from "./studentController.js";
 
 const commands = [
   {
@@ -15,32 +15,6 @@ const commands = [
     description: "Filtre les élèves en fonction de leur moyenne"
   }
 ]
-
-
-
-const students = JSON.parse(fs.readFileSync('./Data/students.json', {encoding: 'utf8'}))
-
-const list = () => {
-  const names = students.map(student => student.name)
-  console.log(names.join('\n'))
-}
-
-const find = (name) => {
-  const student = students.find((student) => student.name.trim().toLowerCase() === name.trim().toLowerCase())
-  if (!student) {
-    console.log(`L'élève ${name} n'existe pas.`)
-    return
-  }
-  console.table(student)
-}
-
-const more = (num) => {
-  const filterStudent =  students.filter(student => {
-    return (student.notes.reduce((acc, curr) => acc + curr, 0) / student.notes.length) > num
-  })
-  
-  console.table(filterStudent)
-}
 
 process.stdin.on("data", (chunk) => {
   const data = chunk.toString()

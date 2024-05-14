@@ -1,8 +1,27 @@
-import os from 'node:os';
+import dotenv from 'dotenv'
+import readline from "node:readline";
+dotenv.config(/*{
+  path: './.env.prod'
+}*/)
 
-process.stdin.on('data', (chunk) => {
-  console.log(chunk.toString())
-  process.exit()
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
 })
 
-process.stdout.write("coucou")
+rl.setPrompt('STUDENT> ')
+rl.prompt()
+
+// rl.question("qui etes vous ?", (answer) => {
+//   console.log(answer)
+//
+//   rl.close()
+// })
+
+rl.on('line', (line) => {
+  console.log('j ai entendu ' + line)
+  rl.prompt()
+}).on('close', () => {
+  console.log('Bye')
+  process.exit();
+})

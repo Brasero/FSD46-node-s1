@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/Brasero/FSD46-node-s1/issues"
   },
-  "homepage": "https://github.com/Brasero/FSD46-node-s1#readme"
+  "homepage": "https://github.com/Brasero/FSD46-node-s1#readme",
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  }
 }
