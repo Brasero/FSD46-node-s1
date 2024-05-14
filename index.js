@@ -1,9 +1,39 @@
 import dotenv from 'dotenv'
 import readline from "node:readline";
+import {extractArg} from "./utils.js";
+import {list, more, find, less, addNote} from "./studentController.js";
 // dotenv.config() défini les variable d'environnement disponible dans `process.env`
 dotenv.config(/*{
   path: './.env.prod'
 }*/)
+
+
+const commands = [
+  {
+    name: "list",
+    description: "Liste tout les élèves."
+  },
+  {
+    name: 'find <string>',
+    description: "Cherche puis affiche les infos d'un élève si il existe."
+  },
+  {
+    name: 'more <number>',
+    description: "Filtre les élèves en fonction de leur moyenne"
+  },
+  {
+    name: 'quit',
+    description: "Met fin à l'éxecution du programme"
+  },
+  {
+    name: 'less <number>',
+    description: "Filtre les élèves en fonction de leur moyenne"
+  },
+  {
+    name: "addNote",
+    description: "Ajoute une note à un élève"
+  }
+]
 
 // readline.createInterface permet de créer une interface utilisateur
 // ici ont défini une interface en invite de commande
@@ -26,7 +56,44 @@ rl.prompt()
 // rl.on() permet de placer un listener sur un évènement particulier
 // l'évènement `line` est déclenché lorsque l'utilisateur valide une saisie dans l'invite de commande en tapant `entrée`
 rl.on('line', (line) => {
-  console.log('j ai entendu ' + line)
+  
+  if (line.trim() === 'quit') {
+    rl.close()
+  }
+  
+  switch (line) {
+    case 'list':
+      list()
+      break;
+      
+    case line.match(/^find /) ? line : null :
+      find(extractArg(line))
+      break
+    
+    case line.match(/^more /) ? line : null :
+      more(extractArg(line))
+      break
+    
+    case line.match(/^less /) ? line : null :
+      less(extractArg(line))
+      break
+    
+    case 'addNote':
+      rl.question("A qui souhaitez vous ajouter une note ? ", (name) => {
+        rl.question("Quel note àjouter à "+name, (note) => {
+          addNote(name, note)
+          rl.prompt()
+        })
+      })
+      break;
+    
+    default:
+      console.group('Commande inconnue')
+        console.log('Liste des commandes')
+        console.table(commands, ['name', 'description'])
+      console.groupEnd()
+      break
+  }
   rl.prompt()
 })
   // l'évènement `close` est déclenché lors de l'arrêt du processus en cours
