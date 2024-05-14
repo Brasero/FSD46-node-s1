@@ -1,4 +1,5 @@
-const fs = require('node:fs')
+import {extractArg} from "./utils.mjs"
+import fs from 'node:fs';
 
 const commands = [
   {
@@ -15,11 +16,7 @@ const commands = [
   }
 ]
 
-const extractArg = (text) => {
-  const elem = text.split(' ')
-  if (elem.length < 3) return elem[1];
-  return elem[1] + ' ' + elem[2]
-}
+
 
 const students = JSON.parse(fs.readFileSync('./Data/students.json', {encoding: 'utf8'}))
 
