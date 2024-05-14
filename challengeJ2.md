@@ -2,6 +2,8 @@
 
 Cet exercice est libre, vous devez implémenter le jeu Chifoumi avec les connaissances que nous venons d'aborder. Utilisez readline.
 
+Pensez à organiser votre code en différents fichiers et à séparer l'interface utilisateur de la couche métier.
+
 Le jeu du Chifoumi se fera avec deux joueurs créer de manière automatique, par le script, les figures possibles du jeu chifoumi (`pierre`, `feuille`, `ciseaux`) seront définies en variable d'environnement.
 
 L'utilisateur pourra lancer le jeu et précisé le nombre de manches à jouer (`exemple` : `start 10` lancera une partie de 10 manches),
