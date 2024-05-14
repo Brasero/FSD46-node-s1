@@ -1,4 +1,4 @@
-const os = require('node:os')
+import os from 'node:os';
 
 process.stdin.on('data', (chunk) => {
   console.log(chunk.toString())
