@@ -67,7 +67,7 @@ const server = http.createServer((req, res) => {
   res.writeHead(404, {
     "Content-Type": 'text/html'
   })
-  res.end(header + "Oups you lost yourself"  + footer)
+  res.end(fs.readFileSync(path.join(viewPath, '404.html'), {encoding: 'utf8'}))
 })
 
 server.listen(port, host, () => {
