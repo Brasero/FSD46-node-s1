@@ -1,12 +1,14 @@
 import http from 'node:http'
 import path from 'node:path'
 import fs from "node:fs";
+import querystring from "node:querystring";
 
 const port = 8080;
 const host = "localhost";
 
 const viewPath = path.join(import.meta.dirname, 'src', 'view') //Chemin absolu vers le dossier de vues
 const dataPath = path.join(import.meta.dirname, 'src', 'Data') //Chemin absolu vers le dossier de Data
+const assetsPath = path.join(import.meta.dirname, "src", "assets")
 
 const server = http.createServer((req, res) => {
   
@@ -16,6 +18,15 @@ const server = http.createServer((req, res) => {
     })
     res.end()
     return
+  }
+  
+  // Permet de fournir une feuille de style.
+  if (req.url === "/bootstrap") {
+    const css = fs.readFileSync(path.join(assetsPath, "bootstrap.min.css"), {encoding: "utf8"})
+    res.writeHead(200, {
+      "Content-Type": "text/css"
+    })
+    return res.end(css)
   }
   
   //Je vérifie la route demandée
@@ -34,9 +45,66 @@ const server = http.createServer((req, res) => {
         })
         res.end(e.message)
       }
+    } // Fin de traitement de la methode GET
+    
+    if(req.method === "POST") {
+      let body = "";
+      req.on("data", (chunk) => {
+        body += chunk.toString()
+      })
+      req.on("end", () => {
+        const newStudent = querystring.parse(body)
+        const notesArray = newStudent.notes.split(',')
+        const notes = notesArray.map(note => parseInt(note.replace(" ", "")))
+        if (notes.includes(NaN)) {
+          res.writeHead(500, {
+            "Content-Type": "text/plain"
+          })
+          return res.end("Merci de ne saisir que des valeurs numérique pour les notes, séparée d'une virgule")
+        }
+        newStudent.name = newStudent.name.replace(" ", "")
+        newStudent.notes = notes;
+        const fileName = `${newStudent.name.toLowerCase()}.json`;
+        //Creation du fichier json pour newStudent
+        fs.writeFile(path.join(dataPath, fileName), JSON.stringify(newStudent, null, 2), (err) => {
+          if (err) {
+            res.writeHead(500, {
+              "Content-Type": "text/plain"
+            })
+            res.end(err.message)
+            return
+          }
+          
+          const all = JSON.parse(fs.readFileSync(path.join(dataPath, "all.json"), {encoding: 'utf8'}))
+          all.student.push(newStudent)
+          fs.writeFileSync(path.join(dataPath, "all.json"), JSON.stringify(all, null, 2))
+          
+          res.writeHead(301, {
+            "Location": "/"
+          })
+          res.end()
+        })
+      })
     }
     
     return
+  }
+  
+  if (req.url === '/users') {
+    let html = fs.readFileSync(path.join(viewPath, "__header.html"), {encoding: 'utf8'})
+    const all = fs.readFileSync(path.join(dataPath, "all.json"), {encoding: "utf8"})
+    const {student} = JSON.parse(all)
+    html += "<ul>"
+    student.forEach(stud => {
+      html += `<li>${stud.name}</li>`
+    })
+    html += '</ul>'
+    html += "<a href='/'>Home</a>"
+    html += fs.readFileSync(path.join(viewPath, "__footer.html"), {encoding: "utf8"})
+    res.writeHead(200, {
+      "Content-Type": "text/html"
+    })
+    return res.end(html)
   }
   
   res.writeHead(404, {

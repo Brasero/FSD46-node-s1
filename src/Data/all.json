@@ -76,6 +76,15 @@
       ],
       "address": "Paris",
       "mention": null
+    },
+    {
+      "name": "test",
+      "notes": [
+        12,
+        14
+      ],
+      "address": "jfjklfjoayh",
+      "mention": "Bien"
     }
   ]
 }
