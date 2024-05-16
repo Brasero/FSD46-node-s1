@@ -20,5 +20,8 @@
   "homepage": "https://github.com/Brasero/FSD46-node-s1#readme",
   "devDependencies": {
     "dotenv": "^16.4.5"
+  },
+  "dependencies": {
+    "pug": "^3.0.2"
   }
 }
