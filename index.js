@@ -2,6 +2,7 @@ import http from 'node:http'
 import path from 'node:path'
 import fs from "node:fs";
 import querystring from "node:querystring";
+import pug from "pug"
 
 const port = 8080;
 const host = "localhost";
@@ -33,18 +34,19 @@ const server = http.createServer((req, res) => {
   if(req.url === '/') {
     //Ensuite, je vérifie la methode
     if(req.method === 'GET') {
-      try {
-        const homePage = fs.readFileSync(path.join(viewPath, 'form.html'), {encoding: 'utf8'})
+      pug.renderFile(path.join(viewPath, "formpug.pug"), {user: {age: 19}}, (err, homePage) => {
+        if (err) {
+          res.writeHead(500, {
+            "Content-Type": "text/plain"
+          })
+          res.end(err.message)
+        }
+        
         res.writeHead(200, {
           "Content-Type": "text/html"
         })
         res.end(homePage)
-      } catch(e) {
-        res.writeHead(500, {
-          "Content-Type": "text/plain"
-        })
-        res.end(e.message)
-      }
+      })
     } // Fin de traitement de la methode GET
     
     if(req.method === "POST") {
@@ -91,20 +93,24 @@ const server = http.createServer((req, res) => {
   }
   
   if (req.url === '/users') {
-    let html = fs.readFileSync(path.join(viewPath, "__header.html"), {encoding: 'utf8'})
+    let html;
     const all = fs.readFileSync(path.join(dataPath, "all.json"), {encoding: "utf8"})
     const {student} = JSON.parse(all)
-    html += "<ul>"
-    student.forEach(stud => {
-      html += `<li>${stud.name}</li>`
+    
+    pug.renderFile(path.join(viewPath, 'users.pug'), {students: student}, (err, data) => {
+      if (err) {
+        res.writeHead(500, {
+          "Content-Type": "text/plain"
+        })
+        return res.end(err.message)
+      }
+      
+      res.writeHead(200, {
+        "Content-Type": "text/html"
+      })
+      return res.end(data)
     })
-    html += '</ul>'
-    html += "<a href='/'>Home</a>"
-    html += fs.readFileSync(path.join(viewPath, "__footer.html"), {encoding: "utf8"})
-    res.writeHead(200, {
-      "Content-Type": "text/html"
-    })
-    return res.end(html)
+    return
   }
   
   res.writeHead(404, {
