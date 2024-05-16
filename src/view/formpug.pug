@@ -1,33 +1,79 @@
+//-
+    Les Minxins pug sont tel des fonction js avec un nom (exemple: `inputGroup`),
+    une liste d'argument si besoin (exemple: `name`), et du code à executer.
+    Les Mixins sont déclaré au plus haut des fichier ou elles sont utilisée
+    il est possible d'en déclaré autant qu'on le souhaite,
+    en faisant attention bien sur à l'indentation
 mixin inputGroup(name)
+    //-
+        N'importe où dans un fichier pug il est possible de faire du javascript
+        qui sera executé au moment de la compilation. Autant dans le template que dans une mixin
+        Il suffit d'utilisé le trait d'union `-` suivie de notre code js pour un code sur une seule ligne.
+        Parfois il est necessaire d'écrire notre code sur plusieurs lignes, il faudra également utiliser le trait d'union
+        mais cette fois, faire un retour à la ligne et une tabulation avant d'écrire son JS
+        ainsi chaque ligne tabulé par rapport au trait d'union sera considérer comme du code JS (comme ci-dessous)
     -
         const nameToUpperCase = `${name[0].toUpperCase()}${name.substring(1)}`;
     label
         | #{nameToUpperCase}
         input.form-control(name=name, type='text')
 
+//- ⚠ Attention ! C'est un langage basé sur l'indentation (comme le langage Python par ex.).
+    Une mauvaise indentation entraînera une erreur de compilation !
 
+    On ecrit les balise HTML les une à la suite des autres sans les chevrons `< >`.
+    Chaque indentation correspond à une imbrication.
+    Dans le cas où une balise n'en contient qu'une seule autre il est possible d'utilisé la notation suivante :
+    `div: label`
+    La ligne ci dessus est équivalente à celle ci dessous :
+    `div
+        label`
+
+    Pour chaque balise, il est possible de lui passer des attributs à l'intérieur de parenthèse
+    (exemple: a(href="/") qui rendra à la compilation : <a href="/"></a>)
+
+    Pour les attributs `class` et `id` il est également possible d'utilisé les selecteur css
+    (exemple : div.maSuperClass#monSuperId)
 div.container#formContainer: div.row: div.col-8: form(action="/", method="POST")
     div.form-group
+        //- pour utiliser une mixin il faudra utilisé l'opérateur `+` suivie du nom de la mixin
+            et éventuellement des paramètres attendu si il en a.
         +inputGroup("name")
         +inputGroup("notes")
         +inputGroup('address')
         +inputGroup("mention")
     button.btn.btn-primary(type="submit") Ajouter
-    //- Mon commentaire pug
-    // Mon commentaire html
+    //- Mon commentaire pug (n'apparait pas dans le résultat de la compilation)
+    // Mon commentaire html (apparait dans le résultat de la compilation)
     //-
+        Il est possible de faire une boucle for in en pug avec la notation suivante :
         each user, index in users
+          //- Lorsque l'on souhaite affiché UNIQUEMENT le contenu d'une variable
+            dans une balise HTML il est possible d'utiliser la notation qui suit :
           li= user
+          //- Si l'on souhaite ajouté du texte `en dur` en plus il faudra alors interpolé notre variable avec `#{}`
+            comme ci-dessous
           li  bonjour, #{user}
+        //- Avec le trait d'union il est également possible de faire un boucle for in en JS directement
         - for (const user in users)
             li= user
 
+    //- Il est également possible d'utiliser
+        la boucle while en pug,
+        il faudra cependant déclarer
+        la variable d'itération au préalable, en JS, comme ci-dessous
     - let i = 1;
 
     while i <= 10
         div= i
+          //- Il ne faudra pas oublier d'incrémenter
+            notre variable d'itération afin de ne pas
+            tomber dans une boucle infini à la compilation
         - i++
 
+    //- ce qui suit représente l'utilisation d'un switch & case en Pug
+        Le mot clé `case` vient remplacé le mot `switch` qui disparait
+        et le mot clé `when` prendra la place du case
     case user.age
         when 18
             p Vous avez 18 ans
