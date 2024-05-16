@@ -24,11 +24,16 @@ else
 //    console.log(data)
 //  })
 
-pug.renderFile(path.join(viewPath, "user.pug"), { user: {isAdmin: true} }, (err, data) => {
-  if (err) throw err;
-  console.log(data)
-})
 
-const compileFile = pug.compileFile(path.join(viewPath, "user.pug"))
+// pug.renderFile(path.join(viewPath, "nav.pug"), {}, (err, data) => {
+//   if (err) throw err;
+//   console.log(data)
+// })
 
-console.log(compileFile({user: {isAdmin: true}}))
+const compileNav = pug.compileFile(path.join(viewPath, "nav.pug"), {pretty: true})
+//Pour avoir un rendu du html
+// indenté il faut passer par compile ou compileFile et passé en option la propriété `pretty` avec la valeur `true`
+
+const compileForm = pug.compileFile(path.join(viewPath, "formpug.pug"), {pretty: true})
+
+console.log(compileForm({user: {age: 19}}))

@@ -1,0 +1,35 @@
+mixin inputGroup(name)
+    -
+        const nameToUpperCase = `${name[0].toUpperCase()}${name.substring(1)}`;
+    label
+        | #{nameToUpperCase}
+        input.form-control(name=name, type='text')
+
+
+div.container#formContainer: div.row: div.col-8: form(action="/", method="POST")
+    div.form-group
+        +inputGroup("name")
+        +inputGroup("notes")
+        +inputGroup('address')
+        +inputGroup("mention")
+    button.btn.btn-primary(type="submit") Ajouter
+    //- Mon commentaire pug
+    // Mon commentaire html
+    //-
+        each user, index in users
+          li= user
+          li  bonjour, #{user}
+        - for (const user in users)
+            li= user
+
+    - let i = 1;
+
+    while i <= 10
+        div= i
+        - i++
+
+    case user.age
+        when 18
+            p Vous avez 18 ans
+        when 19
+          p Vous avez 19 ans
