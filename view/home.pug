@@ -1,0 +1,14 @@
+extends ./layout/layout
+
+block styles
+    link(rel="stylesheet", href="/styles/style", type="text/css")
+
+block content
+    div.page: div.content
+        div.formContainer
+            form.userForm(action="/", method="POST")
+                label.inputGroup Name
+                    input(type='text', name='name')
+                label.inputGroup Birthdate
+                    input(type='date', name='birthdate')
+                input.submit(type="submit", value="Send")

@@ -1,0 +1,20 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem;
+}
+
+.notFound {
+    font-size: 2rem;
+    color: #0237f8;
+}
+
+.content > p {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}

@@ -1,0 +1,10 @@
+extends ./layout/layout
+
+block styles
+    link(rel="stylesheet", href="/styles/404", type='text/css')
+
+block content
+    div.page: div.notFound
+        div.content
+            p Oups, cette page n'existe pas. Retournez à
+                a.link(href="/") l'accueil

@@ -1,0 +1,15 @@
+extends ./layout/layout
+
+mixin studentItem(name, birth)
+    li
+        span.name= name
+        span.birth= birth
+        a(href="/delete/"+name).suppress: button X
+
+block styles
+    link(rel="stylesheet", href="/styles/style", type="text/css")
+
+block content
+    div.page: div.content
+        each student in students
+          +studentItem(student.name, student.birth)
